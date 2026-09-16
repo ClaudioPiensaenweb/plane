@@ -22,11 +22,14 @@ import { cn, generateWorkItemLink } from "@plane/utils";
 // components
 import { MultipleSelectEntityAction } from "@/components/core/multiple-select";
 import { IssueProperties } from "@/components/issues/issue-layouts/properties";
+// piensaenweb
+import { Cronometro } from "@/components/piensaenweb/cronometro";
 import { IssueIdentifier } from "@/components/issues/issue-detail/issue-identifier";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
+import { useUser } from "@/hooks/store/user";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { calculateIdentifierWidth } from "../utils";
@@ -79,6 +82,8 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
   // hooks
   const { sidebarCollapsed: isSidebarCollapsed } = useAppTheme();
   const { getProjectIdentifierById, currentProjectNextSequenceId } = useProject();
+  // Quien ficha: el tiempo se imputa a la persona, no al equipo.
+  const { data: usuarioActual } = useUser();
   const {
     getIsIssuePeeked,
     peekIssue,
@@ -297,6 +302,17 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
         <div className="flex flex-shrink-0 items-center gap-2">
           {!issue?.tempId ? (
             <>
+              {/* El cronometro va aqui, en la fila: en el triaje diario se
+                  arranca sin abrir la tarea. Es la diferencia entre registrar
+                  el tiempo y tener que acordarse de registrarlo. */}
+              {projectIdentifier && issue.sequence_id ? (
+                <Cronometro
+                  referencia={`${projectIdentifier}-${issue.sequence_id}`}
+                  tareaId={issue.id}
+                  personaId={usuarioActual?.id}
+                  compacto
+                />
+              ) : null}
               <IssueProperties
                 className={`relative flex flex-wrap ${isSidebarCollapsed ? "md:flex-shrink-0 md:flex-grow" : "lg:flex-shrink-0 lg:flex-grow"} items-center gap-2 whitespace-nowrap`}
                 issue={issue}
