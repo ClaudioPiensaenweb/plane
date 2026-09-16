@@ -47,7 +47,7 @@ export const FilterStartDate = observer(function FilterStartDate(props: Props) {
           handleClose={() => setIsDateFilterModalOpen(false)}
           isOpen={isDateFilterModalOpen}
           onSelect={(val) => handleUpdate(val)}
-          title="Start date"
+          title="Fecha de inicio"
         />
       )}
       <FilterHeader
@@ -68,7 +68,7 @@ export const FilterStartDate = observer(function FilterStartDate(props: Props) {
                   multiple
                 />
               ))}
-              <FilterOption isChecked={isCustomDateSelected()} onClick={handleCustomDate} title="Custom" multiple />
+              <FilterOption isChecked={isCustomDateSelected()} onClick={handleCustomDate} title="Personalizado" multiple />
             </>
           ) : (
             <p className="text-11 text-placeholder italic">No matches found</p>

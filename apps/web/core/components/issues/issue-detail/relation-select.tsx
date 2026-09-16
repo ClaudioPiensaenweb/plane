@@ -137,7 +137,7 @@ export const IssueRelationSelect = observer(function IssueRelationSelect(props: 
                       </Link>
                     </Tooltip>
                     {!disabled && (
-                      <Tooltip tooltipContent="Remove" position="bottom" isMobile={isMobile}>
+                      <Tooltip tooltipContent="Quitar" position="bottom" isMobile={isMobile}>
                         {/* eslint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
                         <span
                           onClick={(e) => {

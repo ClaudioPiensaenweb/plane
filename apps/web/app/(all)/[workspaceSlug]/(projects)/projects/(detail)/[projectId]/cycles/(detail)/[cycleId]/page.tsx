@@ -56,7 +56,7 @@ function CycleDetailPage({ params }: Route.ComponentProps) {
       {!cycle && !loader ? (
         <EmptyState
           image={emptyCycle}
-          title="Cycle does not exist"
+          title="El ciclo no existe"
           description="The cycle you are looking for does not exist or has been deleted."
           primaryButton={{
             text: "View other cycles",

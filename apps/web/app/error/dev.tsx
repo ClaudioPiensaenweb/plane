@@ -45,7 +45,7 @@ export function DevErrorComponent({ error, onGoHome, onReload }: DevErrorCompone
           <Banner
             variant="error"
             icon={<InfoFillIcon className="size-5" />}
-            title="Route Error Response"
+            title="Error de navegación"
             animationDuration={0}
           />
 
@@ -80,7 +80,7 @@ export function DevErrorComponent({ error, onGoHome, onReload }: DevErrorCompone
           <Banner
             variant="error"
             icon={<InfoFillIcon className="size-5" />}
-            title="Runtime Error"
+            title="Error de ejecución"
             animationDuration={0}
           />
           <Card variant={ECardVariant.WITH_SHADOW} className="!p-6 transition-none">
@@ -135,7 +135,7 @@ export function DevErrorComponent({ error, onGoHome, onReload }: DevErrorCompone
         <Banner
           variant="error"
           icon={<InfoFillIcon className="size-5" />}
-          title="Unknown Error"
+          title="Error desconocido"
           animationDuration={0}
         />
 

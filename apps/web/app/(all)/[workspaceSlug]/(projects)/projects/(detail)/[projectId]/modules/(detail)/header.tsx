@@ -139,7 +139,7 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
               <Breadcrumbs.Item
                 component={
                   <BreadcrumbLink
-                    label="Modules"
+                    label="Módulos"
                     href={`/${workspaceSlug}/projects/${projectId}/modules/`}
                     icon={<ModuleIcon className="h-4 w-4 text-tertiary" />}
                     isLast
@@ -207,7 +207,7 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
             </div>
             {moduleId && <WorkItemFiltersToggle entityType={EIssuesStoreType.MODULE} entityId={moduleId} />}
             <FiltersDropdown
-              title="Display"
+              title="Mostrar"
               placement="bottom-end"
               miniIcon={<SlidersHorizontal className="size-3.5" />}
             >

@@ -49,7 +49,7 @@ export function IdentifierText(props: TIdentifierTextProps) {
   const variantClassName = VARIANT_MAP[variant];
 
   return (
-    <Tooltip tooltipContent="Click to copy" disabled={!enableClickToCopyIdentifier} position="top">
+    <Tooltip tooltipContent="Pulsa para copiar" disabled={!enableClickToCopyIdentifier} position="top">
       <button
         type="button"
         className={cn("text-12 font-medium whitespace-nowrap text-tertiary", textSizeClassName, variantClassName, {

@@ -36,7 +36,7 @@ function ProjectViewIssuesPage({ params }: Route.ComponentProps) {
     return (
       <EmptyState
         image={emptyView}
-        title="View does not exist"
+        title="La vista no existe"
         description="The view you are looking for does not exist or you don't have permission to view it."
         primaryButton={{
           text: "View other views",

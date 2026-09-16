@@ -77,7 +77,7 @@ export const ProjectArchivesHeader = observer(function ProjectArchivesHeader(pro
               component={
                 <BreadcrumbLink
                   href={`/${workspaceSlug}/projects/${projectId}/archives/issues`}
-                  label="Archives"
+                  label="Archivo"
                   icon={<ArchiveIcon className="h-4 w-4 text-tertiary" />}
                 />
               }

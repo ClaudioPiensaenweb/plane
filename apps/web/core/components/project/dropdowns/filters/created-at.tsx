@@ -50,7 +50,7 @@ export const FilterCreatedDate = observer(function FilterCreatedDate(props: Prop
           handleClose={() => setIsDateFilterModalOpen(false)}
           isOpen={isDateFilterModalOpen}
           onSelect={(val) => handleUpdate(val)}
-          title="Created date"
+          title="Fecha de creación"
         />
       )}
       <FilterHeader
@@ -74,7 +74,7 @@ export const FilterCreatedDate = observer(function FilterCreatedDate(props: Prop
               <FilterOption
                 isChecked={isCustomDateSelected()}
                 onClick={handleCustomDate}
-                title="Custom"
+                title="Personalizado"
                 multiple={false}
               />
             </>

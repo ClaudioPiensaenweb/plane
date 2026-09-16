@@ -14,6 +14,9 @@ cliente, y el margen por cliente es el motivo de todo el proyecto.
 | Cambio | Dónde | Por qué |
 |---|---|---|
 | **Cronómetro en la fila de la lista** | `apps/web/core/components/piensaenweb/cronometro.tsx` | En el triaje diario se arranca sin abrir la tarea. Es la diferencia entre registrar el tiempo y tener que acordarse |
+| **Español por defecto** | `packages/i18n/src/constants/language.ts` | Quien entra lo ve en su idioma sin configurar nada, y lo que no esté traducido cae en español en vez de en inglés |
+| **72 textos traducidos** | 51 ficheros de `apps/web` | Estaban escritos a fuego en el código, así que el fichero de idiomas no los alcanzaba |
+| **17 cadenas del fichero de idioma** | `packages/i18n/src/locales/es/` | Entre ellas *Intake* → **Entrada**, que es la puerta de entrada del soporte |
 
 El tiempo **no se guarda aquí**: vive en nuestro orquestador, en su propia base de datos.
 

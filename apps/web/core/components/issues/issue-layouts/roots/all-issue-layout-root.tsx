@@ -115,7 +115,7 @@ export const AllIssueLayoutRoot = observer(function AllIssueLayoutRoot(props: Pr
   if (!isLoading && !globalViewsLoading && !issuesLoading && !viewDetails && !isDefaultView) {
     return (
       <EmptyStateDetailed
-        title="View does not exist"
+        title="La vista no existe"
         description="The view you are looking for does not exist or you don't have permission to view it."
         assetKey="view"
         actions={[

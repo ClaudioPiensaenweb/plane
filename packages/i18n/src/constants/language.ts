@@ -6,7 +6,10 @@
 
 import type { TLanguage, ILanguageOption } from "../types";
 
-export const FALLBACK_LANGUAGE: TLanguage = "en";
+// Piensaenweb: el idioma de la casa es el espanol. Quien entre por primera vez
+// lo ve en su idioma sin tener que configurar nada, y lo que no este traducido
+// cae aqui en vez de en ingles.
+export const FALLBACK_LANGUAGE: TLanguage = "es";
 
 export const SUPPORTED_LANGUAGES: ILanguageOption[] = [
   { label: "English", value: "en" },

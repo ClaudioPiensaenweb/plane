@@ -128,7 +128,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
           <Breadcrumbs.Item
             component={
               <BreadcrumbLink
-                label="Views"
+                label="Vistas"
                 href={`/${workspaceSlug}/projects/${projectId}/views/`}
                 icon={<ViewsIcon className="h-4 w-4 text-tertiary" />}
               />
@@ -181,7 +181,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
           )}
           {viewId && <WorkItemFiltersToggle entityType={EIssuesStoreType.PROJECT_VIEW} entityId={viewId} />}
           {!viewDetails.is_locked && (
-            <FiltersDropdown title="Display" placement="bottom-end">
+            <FiltersDropdown title="Mostrar" placement="bottom-end">
               <DisplayFiltersSelection
                 layoutDisplayFiltersOptions={
                   activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
