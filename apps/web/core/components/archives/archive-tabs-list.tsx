@@ -19,7 +19,7 @@ const ARCHIVES_TAB_LIST: {
 }[] = [
   {
     key: "issues",
-    label: "Work items",
+    label: "Elementos de trabajo",
     shouldRender: () => true,
   },
   {

@@ -70,23 +70,23 @@ export const ISSUE_PRIORITIES: {
 }[] = [
   {
     key: "urgent",
-    title: "Urgent",
+    title: "Crítica",
   },
   {
     key: "high",
-    title: "High",
+    title: "Con fecha",
   },
   {
     key: "medium",
-    title: "Medium",
+    title: "Normal",
   },
   {
     key: "low",
-    title: "Low",
+    title: "Cuando haya hueco",
   },
   {
     key: "none",
-    title: "None",
+    title: "Sin prioridad",
   },
 ];
 
