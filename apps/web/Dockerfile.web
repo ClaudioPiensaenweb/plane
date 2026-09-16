@@ -46,6 +46,11 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store CI=true pnpm install --o
 ARG VITE_API_BASE_URL=""
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
+# Piensaenweb: donde vive el orquestador. Se hornea al compilar porque la web es
+# una aplicacion estatica; sin esto el cronometro no tiene con quien hablar.
+ARG VITE_PIENSA_API=""
+ENV VITE_PIENSA_API=$VITE_PIENSA_API
+
 ARG VITE_ADMIN_BASE_URL=""
 ENV VITE_ADMIN_BASE_URL=$VITE_ADMIN_BASE_URL
 

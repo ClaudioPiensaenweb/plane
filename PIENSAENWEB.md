@@ -34,7 +34,7 @@ Plane publique — y publican cada dos semanas. Lo que se pueda resolver fuera, 
 
 | Variable | Para qué |
 |---|---|
-| `NEXT_PUBLIC_PIENSA_API` | Dónde vive el orquestador. Sin ella, el cronómetro no se muestra |
+| `VITE_PIENSA_API` | Dónde vive el orquestador. Sin ella, el cronómetro no cuenta. Es `VITE_*` porque la web de Plane es React Router + Vite, no Next |
 
 ## Mantenerse al día con el original
 

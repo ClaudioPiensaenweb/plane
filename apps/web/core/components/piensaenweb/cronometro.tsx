@@ -17,7 +17,9 @@ import { cn } from "@plane/utils";
  * que acordarse de registrarlo.
  */
 
-const API = process.env.NEXT_PUBLIC_PIENSA_API ?? "";
+// La web de Plane es React Router + Vite: las variables se leen con
+// import.meta.env y tienen que llamarse VITE_*.
+const API = import.meta.env.VITE_PIENSA_API ?? "";
 
 type Props = {
   referencia: string; // SOP-12
