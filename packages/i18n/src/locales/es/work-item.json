@@ -47,10 +47,10 @@
       "success": "Elemento de trabajo creado correctamente"
     },
     "priority": {
-      "urgent": "Urgente",
-      "high": "Alta",
-      "medium": "Media",
-      "low": "Baja"
+      "urgent": "Crítica",
+      "high": "Con fecha",
+      "medium": "Normal",
+      "low": "Cuando haya hueco"
     },
     "display": {
       "properties": {
