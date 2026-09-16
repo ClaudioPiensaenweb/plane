@@ -24,10 +24,12 @@ import { cn, generateWorkItemLink } from "@plane/utils";
 import { MultipleSelectEntityAction } from "@/components/core/multiple-select";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { IssueIdentifier } from "@/components/issues/issue-detail/issue-identifier";
+import { Cronometro } from "@/components/piensaenweb/cronometro";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
+import { useUser } from "@/hooks/store/user";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
@@ -205,6 +207,8 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
     handleRedirection(workspaceSlug?.toString(), issue, isMobile, nestingLevel);
 
   const { subIssues: subIssuesStore, issue } = useIssueDetail();
+  // Quien ficha. Sin persona no hay cronometro: el tiempo lleva nombre.
+  const { data: usuarioActual } = useUser();
 
   const issueDetail = issue.getIssueById(issueId);
 
@@ -368,6 +372,14 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
                     </Tooltip>
                   </div>
                 </div>
+                {projectIdentifier && issueDetail.sequence_id ? (
+                  <Cronometro
+                    referencia={`${projectIdentifier}-${issueDetail.sequence_id}`}
+                    tareaId={issueDetail.id}
+                    personaId={usuarioActual?.id}
+                    compacto
+                  />
+                ) : null}
                 <div
                   className={`opacity-0 transition-opacity group-hover:opacity-100 ${isMenuActive ? "!opacity-100" : ""}`}
                   onClick={(e) => e.stopPropagation()}
