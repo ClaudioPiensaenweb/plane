@@ -77,11 +77,27 @@ function EmptySpaceItem({ title, description, Icon, action, href }: EmptySpaceIt
     spaceItem = <Link href={href}>{spaceItem}</Link>;
   }
 
+  // Un <li> con onClick no es un boton: no responde al teclado, no da
+  // realimentacion al pulsar y deja seleccionar el texto, asi que al hacer clic
+  // parece que "no pasa nada" y lo que ves es la palabra marcada en azul. Le
+  // paso al equipo entero al aceptar su invitacion.
+  if (!href) {
+    return (
+      <li>
+        <button
+          type="button"
+          onClick={action}
+          className="w-full cursor-pointer select-none text-left transition-colors hover:bg-layer-1-hover active:bg-layer-1-active focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+        >
+          {spaceItem}
+        </button>
+      </li>
+    );
+  }
+
   return (
     <>
-      <li className="cursor-pointer" onClick={action} role="button">
-        {spaceItem}
-      </li>
+      <li className="cursor-pointer select-none">{spaceItem}</li>
     </>
   );
 }

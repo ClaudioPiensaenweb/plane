@@ -41,6 +41,7 @@ function WorkspaceInvitationPage() {
   // compara que coincida con el de la invitacion; sin el responde 403.
   const email = searchParams.get("email");
   const [fallo, setFallo] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
   // store hooks
   const { data: currentUser } = useUser();
 
@@ -54,6 +55,7 @@ function WorkspaceInvitationPage() {
   const handleAccept = () => {
     if (!invitationDetail) return;
     setFallo(null);
+    setEnviando(true);
     workspaceService
       .joinWorkspace(invitationDetail.workspace.slug, invitationDetail.id, {
         accepted: true,
@@ -74,8 +76,9 @@ function WorkspaceInvitationPage() {
         // consola y el usuario no veia nada. Un fallo invisible parece una
         // pantalla congelada.
         console.error(err);
+        setEnviando(false);
         setFallo(
-          "No hemos podido aceptar la invitacion. Comprueba que has entrado con el mismo " +
+          "No hemos podido aceptar la invitación. Comprueba que has entrado con el mismo " +
             "correo al que te invitamos, o avisanos y te mandamos otra."
         );
       });
@@ -109,27 +112,30 @@ function WorkspaceInvitationPage() {
             </div>
           ) : (
             <EmptySpace
-              title={`You have been invited to ${invitationDetail.workspace.name}`}
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
+              title={`Te damos la bienvenida a ${invitationDetail.workspace.name}`}
+              description="Aquí es donde vive el trabajo del equipo: las tareas de cada cliente, con su tiempo y su estado. Acepta la invitación para entrar."
             >
-              <EmptySpaceItem Icon={CheckIcon} title="Aceptar" action={handleAccept} />
-              <EmptySpaceItem Icon={CloseIcon} title="Ignorar" action={handleReject} />
+              <EmptySpaceItem
+                Icon={CheckIcon}
+                title={enviando ? "Entrando…" : "Aceptar la invitación"}
+                action={enviando ? undefined : handleAccept}
+              />
+              <EmptySpaceItem Icon={CloseIcon} title="Ignorar" action={enviando ? undefined : handleReject} />
               {fallo && <p className="mt-4 text-13 text-danger-primary">{fallo}</p>}
             </EmptySpace>
           )
         ) : error || invitationDetail?.responded_at ? (
           invitationDetail?.accepted ? (
             <EmptySpace
-              title={`You are already a member of ${invitationDetail.workspace.name}`}
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
+              title={`Ya formas parte de ${invitationDetail.workspace.name}`}
+              description="Aquí es donde vive el trabajo del equipo: las tareas de cada cliente, con su tiempo y su estado."
             >
               <EmptySpaceItem Icon={Boxes} title="Ir al inicio" href="/" />
             </EmptySpace>
           ) : (
             <EmptySpace
-              title="This invitation link is not active anymore."
-              description="Your workspace is where you'll create projects, collaborate on your work items, and organize different streams of work in your Plane account."
-              link={{ text: "Or start from an empty project", href: "/" }}
+              title="Este enlace de invitación ya no está activo."
+              description="Puede que ya lo hayas aceptado antes. Entra con tu cuenta y, si no ves el espacio, dínoslo y te mandamos otra invitación."
             >
               {!currentUser ? (
                 <EmptySpaceItem Icon={User2} title="Entra para continuar" href="/" />
