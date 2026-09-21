@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import { useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
@@ -35,6 +36,11 @@ function WorkspaceInvitationPage() {
   const invitation_id = searchParams.get("invitation_id");
   const slug = searchParams.get("slug");
   const token = searchParams.get("token");
+  // El correo de invitacion trae invitation_id, email y slug (ver
+  // workspace_invitation_task.py). El backend EXIGE el email en el cuerpo y
+  // compara que coincida con el de la invitacion; sin el responde 403.
+  const email = searchParams.get("email");
+  const [fallo, setFallo] = useState<string | null>(null);
   // store hooks
   const { data: currentUser } = useUser();
 
@@ -47,10 +53,14 @@ function WorkspaceInvitationPage() {
 
   const handleAccept = () => {
     if (!invitationDetail) return;
+    setFallo(null);
     workspaceService
       .joinWorkspace(invitationDetail.workspace.slug, invitationDetail.id, {
         accepted: true,
         token: token,
+        // Sin esto el servidor responde 403 y la pantalla se queda como estaba,
+        // que es exactamente lo que le pasaba al equipo al pulsar Aceptar.
+        email: email ?? invitationDetail.email,
       })
       .then(() => {
         if (invitationDetail.email === currentUser?.email) {
@@ -59,20 +69,34 @@ function WorkspaceInvitationPage() {
           router.push("/");
         }
       })
-      .catch((err: unknown) => console.error(err));
+      .catch((err: unknown) => {
+        // Y aqui estaba la otra mitad del problema: el error se escribia en la
+        // consola y el usuario no veia nada. Un fallo invisible parece una
+        // pantalla congelada.
+        console.error(err);
+        setFallo(
+          "No hemos podido aceptar la invitacion. Comprueba que has entrado con el mismo " +
+            "correo al que te invitamos, o avisanos y te mandamos otra."
+        );
+      });
   };
 
   const handleReject = () => {
-    if (!invitationDetail || !token) return;
+    if (!invitationDetail) return;
+    setFallo(null);
     void workspaceService
       .joinWorkspace(invitationDetail.workspace.slug, invitationDetail.id, {
         accepted: false,
         token: token,
+        email: email ?? invitationDetail.email,
       })
       .then(() => {
         router.push("/");
       })
-      .catch((err: unknown) => console.error(err));
+      .catch((err: unknown) => {
+        console.error(err);
+        setFallo("No hemos podido registrar tu respuesta. Vuelve a intentarlo en un momento.");
+      });
   };
 
   return (
@@ -90,6 +114,7 @@ function WorkspaceInvitationPage() {
             >
               <EmptySpaceItem Icon={CheckIcon} title="Aceptar" action={handleAccept} />
               <EmptySpaceItem Icon={CloseIcon} title="Ignorar" action={handleReject} />
+              {fallo && <p className="mt-4 text-13 text-danger-primary">{fallo}</p>}
             </EmptySpace>
           )
         ) : error || invitationDetail?.responded_at ? (
@@ -119,6 +144,15 @@ function WorkspaceInvitationPage() {
               />
             </EmptySpace>
           )
+        ) : !invitation_id || !slug ? (
+          // Sin parametros no hay nada que consultar: antes se quedaba girando
+          // para siempre, que es la peor forma de decir "este enlace no vale".
+          <EmptySpace
+            title="Este enlace de invitacion no es valido"
+            description="Abre el enlace tal y como viene en el correo, sin recortarlo. Si no te funciona, dinos y te mandamos otra invitacion."
+          >
+            <EmptySpaceItem Icon={Boxes} title="Ir al inicio" href="/" />
+          </EmptySpace>
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <LogoSpinner />
