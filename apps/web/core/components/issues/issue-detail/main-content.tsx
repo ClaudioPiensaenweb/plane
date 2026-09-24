@@ -15,6 +15,8 @@ import { EFileAssetType, EIssueServiceType } from "@plane/types";
 import { DescriptionVersionsRoot } from "@/components/core/description-versions";
 import { DescriptionInput } from "@/components/editor/rich-text/description-input";
 import { IssueTypeSwitcher } from "@/components/issues/issue-type-switcher";
+// piensaenweb
+import { FichajesDeLaTarea } from "@/components/piensaenweb/fichajes";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";
@@ -180,6 +182,9 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
           disabled={!isEditable || isArchived}
         />
       )}
+
+      {/* Los fichajes, uno a uno, antes de la actividad: es donde se discute el tiempo. */}
+      <FichajesDeLaTarea projectId={projectId} issueId={issueId} disabled={isArchived} />
 
       <IssueActivity workspaceSlug={workspaceSlug} projectId={projectId} issueId={issueId} disabled={isArchived} />
     </>

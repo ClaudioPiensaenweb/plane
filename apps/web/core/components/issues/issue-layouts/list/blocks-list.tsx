@@ -44,11 +44,20 @@ export function IssueBlocksList(props: Props) {
     isEpic = false,
   } = props;
 
+  // piensaenweb: una subtarea cuya tarea madre esta en esta misma lista ya se
+  // ve dentro de ella, al desplegarla. Pintarla tambien suelta, en el primer
+  // nivel, la duplicaba. Si la madre no esta (otro filtro, otra pagina), se
+  // sigue viendo suelta: asi "mis tareas" no pierde las subtareas de nadie.
+  const enLaLista = new Set<string>(issueIds ?? []);
+  const sueltas: string[] = (issueIds ?? []).filter((id: string) => {
+    const madre = issuesMap?.[id]?.parent_id;
+    return !madre || !enLaLista.has(madre);
+  });
+
   return (
     <div className="relative h-full w-full">
-      {issueIds &&
-        issueIds.length > 0 &&
-        issueIds.map((issueId: string, index: number) => (
+      {sueltas.length > 0 &&
+        sueltas.map((issueId: string, index: number) => (
           <IssueBlockRoot
             key={issueId}
             issueId={issueId}
@@ -62,7 +71,7 @@ export function IssueBlocksList(props: Props) {
             containerRef={containerRef}
             selectionHelpers={selectionHelpers}
             groupId={groupId}
-            isLastChild={index === issueIds.length - 1}
+            isLastChild={index === sueltas.length - 1}
             isDragAllowed={isDragAllowed}
             canDropOverIssue={canDropOverIssue}
             isEpic={isEpic}
