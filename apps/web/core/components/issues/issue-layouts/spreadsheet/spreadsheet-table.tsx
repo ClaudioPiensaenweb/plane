@@ -13,6 +13,7 @@ import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, TIssue } from
 import { SpreadsheetIssueRowLoader } from "@/components/ui/loader/layouts/spreadsheet-layout-loader";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
+import { useProjectState } from "@/hooks/store/use-project-state";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
@@ -68,15 +69,23 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
     issues: { getIssueLoader },
   } = useIssuesStore();
   const { issueMap } = useIssues();
+  const { getStateById } = useProjectState();
 
   // piensaenweb: lo mismo que en la lista. Una subtarea cuya madre esta en esta
   // tabla ya se ve al desplegar la madre; pintarla tambien suelta la duplicaba.
   // Si la madre no esta (otro filtro, otra persona), sigue suelta.
   const enLaTabla = new Set(issueIds);
-  const sueltas = issueIds.filter((id) => {
+  // Y lo cerrado (hecho o descartado) va al final: sigue ahi para consultarlo,
+  // pero no se mezcla con lo que queda por hacer. El orden de lo demas no cambia.
+  const cerrada = (id: string) => {
+    const grupo = getStateById(issueMap[id]?.state_id)?.group;
+    return grupo === "completed" || grupo === "cancelled";
+  };
+  const filtradas = issueIds.filter((id) => {
     const madre = issueMap[id]?.parent_id;
     return !madre || !enLaTabla.has(madre);
   });
+  const sueltas = [...filtradas.filter((id) => !cerrada(id)), ...filtradas.filter(cerrada)];
 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;

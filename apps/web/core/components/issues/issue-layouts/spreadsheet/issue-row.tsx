@@ -28,6 +28,7 @@ import { Cronometro } from "@/components/piensaenweb/cronometro";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
+import { useProjectState } from "@/hooks/store/use-project-state";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser } from "@/hooks/store/user";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
@@ -79,9 +80,12 @@ export const SpreadsheetIssueRow = observer(function SpreadsheetIssueRow(props: 
   // store hooks
   const { subIssues: subIssuesStore } = useIssueDetail(isEpic ? EIssueServiceType.EPICS : EIssueServiceType.ISSUES);
   const { issueMap } = useIssues();
+  const { getStateById } = useProjectState();
 
   // derived values
   const issue = issueMap[issueId];
+  const grupoDelEstado = getStateById(issue?.state_id)?.group;
+  const estaCerrada = grupoDelEstado === "completed" || grupoDelEstado === "cancelled";
   const subIssues = subIssuesStore.subIssuesByIssueId(issueId);
   const isIssueSelected = selectionHelpers.getIsEntitySelected(issueId);
   const isIssueActive = selectionHelpers.getIsEntityActive(issueId);
@@ -101,7 +105,9 @@ export const SpreadsheetIssueRow = observer(function SpreadsheetIssueRow(props: 
             style={{ height: "calc(2.75rem - 1px)" }}
           />
         }
-        classNames={cn("bg-surface-1 transition-[background-color]", {
+        classNames={cn("bg-surface-1 transition-[background-color,opacity]", {
+          // piensaenweb: lo cerrado se atenua para que no compita con lo pendiente.
+          "opacity-50 hover:opacity-100": estaCerrada,
           "group selected-issue-row": isIssueSelected,
           "border-[0.5px] border-strong-1": isIssueActive,
         })}
