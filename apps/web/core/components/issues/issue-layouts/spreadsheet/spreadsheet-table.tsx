@@ -12,6 +12,7 @@ import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, TIssue } from
 // components
 import { SpreadsheetIssueRowLoader } from "@/components/ui/loader/layouts/spreadsheet-layout-loader";
 // hooks
+import { useIssues } from "@/hooks/store/use-issues";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
@@ -66,6 +67,16 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
   const {
     issues: { getIssueLoader },
   } = useIssuesStore();
+  const { issueMap } = useIssues();
+
+  // piensaenweb: lo mismo que en la lista. Una subtarea cuya madre esta en esta
+  // tabla ya se ve al desplegar la madre; pintarla tambien suelta la duplicaba.
+  // Si la madre no esta (otro filtro, otra persona), sigue suelta.
+  const enLaTabla = new Set(issueIds);
+  const sueltas = issueIds.filter((id) => {
+    const madre = issueMap[id]?.parent_id;
+    return !madre || !enLaTabla.has(madre);
+  });
 
   const handleScroll = useCallback(() => {
     if (!containerRef.current) return;
@@ -123,7 +134,7 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
         isEpic={isEpic}
       />
       <tbody>
-        {issueIds.map((id) => (
+        {sueltas.map((id) => (
           <SpreadsheetIssueRow
             key={id}
             issueId={id}
