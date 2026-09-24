@@ -32,6 +32,7 @@ export const getSidebarNavigationItemIcon = (key: string, className: string = ""
       return <CycleIcon className={cn("size-4 flex-shrink-0", className)} />;
     case "analytics":
       return <AnalyticsIcon className={cn("size-4 flex-shrink-0", className)} />;
+    case "my_tasks":
     case "your_work":
       return <YourWorkIcon className={cn("size-4 flex-shrink-0", className)} />;
     case "drafts":

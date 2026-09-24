@@ -16,6 +16,7 @@ cliente, y el margen por cliente es el motivo de todo el proyecto.
 | **Cronómetro en la fila de la lista** | `apps/web/core/components/piensaenweb/cronometro.tsx` | En el triaje diario se arranca sin abrir la tarea. Es la diferencia entre registrar el tiempo y tener que acordarse |
 | **Fichajes de la tarea, uno a uno** | `apps/web/core/components/piensaenweb/fichajes.tsx`, insertado en `issue-detail/main-content.tsx` y `peek-overview/view.tsx` | Corregir, añadir y anular cada fichaje desde la propia tarea. Anular no borra, todo pide motivo y queda comentado |
 | **Subtareas sin duplicar en la lista** | `issue-layouts/list/blocks-list.tsx` | Una subtarea cuya madre está en la lista se ve dentro de ella, no además suelta. Si la madre no está, sigue suelta: «mis tareas» no pierde nada |
+| **«Mis tareas» debajo de Inicio** | `packages/constants/src/workspace.ts`, `sidebar-item.tsx`, `helper.tsx` y los `common.json` | La vista *Asignados*, que filtra por quien mira, a un clic para todo el mundo en vez de escondida en Vistas |
 | **Español por defecto** | `packages/i18n/src/constants/language.ts` | Quien entra lo ve en su idioma sin configurar nada, y lo que no esté traducido cae en español en vez de en inglés |
 | **72 textos traducidos** | 51 ficheros de `apps/web` | Estaban escritos a fuego en el código, así que el fichero de idiomas no los alcanzaba |
 | **17 cadenas del fichero de idioma** | `packages/i18n/src/locales/es/` | Entre ellas *Intake* → **Entrada**, que es la puerta de entrada del soporte |
