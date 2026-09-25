@@ -200,6 +200,11 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
 
   const validos = (fichajes ?? []).filter((f) => f.fin && !f.anulado);
   const totalMin = Math.round(validos.reduce((s, f) => s + (f.segundos ?? 0), 0) / 60);
+  // Se ofrece el motivo, no se exige: pedirlo siempre convertía una corrección
+  // de medio minuto en una negociación, y la gente acababa dejando el tiempo
+  // mal antes que pelearse con el formulario. Lo que hace fiable esto es el
+  // rastro de quién cambió qué, que se guarda igual; si no hay motivo, en la
+  // tarea queda escrito «sin motivo indicado», que ya es incómodo de leer.
   const pideMotivo = edicion && edicion.modo !== "nuevo";
 
   const formulario = (
@@ -236,10 +241,10 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
           className={cn(campo, "min-w-[12rem] flex-1")}
           placeholder={
             edicion?.modo === "anular"
-              ? "Motivo: p. ej. se quedó corriendo toda la noche"
+              ? "Motivo (opcional): p. ej. se quedó corriendo toda la noche"
               : edicion?.modo === "restaurar"
-                ? "Motivo para volver a contarlo"
-                : "Motivo del cambio: p. ej. cronómetro olvidado al comer"
+                ? "Motivo (opcional) para volver a contarlo"
+                : "Motivo (opcional): p. ej. cronómetro olvidado al comer"
           }
           value={motivo}
           onChange={(e) => setMotivo(e.target.value)}
@@ -249,7 +254,7 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
       <button
         type="button"
         className={cn(boton, edicion?.modo === "anular" ? "bg-danger-primary text-white" : "bg-accent-primary text-white")}
-        disabled={ocupado || (!!pideMotivo && motivo.trim().length < 5)}
+        disabled={ocupado}
         onClick={guardar}
       >
         {edicion?.modo === "anular" ? "Anular" : edicion?.modo === "restaurar" ? "Restaurar" : "Guardar"}
