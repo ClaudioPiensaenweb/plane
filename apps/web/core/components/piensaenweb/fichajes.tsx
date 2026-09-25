@@ -78,7 +78,18 @@ const campo =
   "h-7 rounded border border-subtle bg-surface-1 px-2 text-13 text-primary placeholder:text-placeholder focus:outline-none focus:border-accent-strong";
 const boton = "h-7 rounded px-2.5 text-13 font-medium disabled:opacity-50";
 
-type Edicion = { id: number | "nuevo"; modo: "editar" | "anular" | "restaurar" | "nuevo"; nota?: string };
+type Edicion = {
+  id: number | "nuevo";
+  modo: "editar" | "anular" | "restaurar" | "nuevo";
+  nota?: string;
+  dia?: string;
+};
+
+/** El timestamp del fichaje como "2026-09-24", en hora local. */
+const aDia = (ts: number) => {
+  const d = new Date(ts * 1000);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+};
 
 export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Props) {
   const { projectId, issueId, disabled } = props;
@@ -98,6 +109,7 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
   const [edicion, setEdicion] = useState<Edicion | null>(null);
   const [minutos, setMinutos] = useState("");
   const [nota, setNota] = useState("");
+  const [dia, setDia] = useState("");
   const [motivo, setMotivo] = useState("");
   const [ocupado, setOcupado] = useState(false);
 
@@ -126,17 +138,20 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
   };
 
   const abrir = (e: Edicion, f?: Fichaje) => {
-    setEdicion({ ...e, nota: f?.nota ?? "" });
+    const suDia = f ? aDia(f.fin ?? f.inicio) : aDia(Math.floor(Date.now() / 1000));
+    setEdicion({ ...e, nota: f?.nota ?? "", dia: suDia });
     setError(null);
     setMotivo("");
     setMinutos(f && f.segundos != null ? String(Math.round(f.segundos / 60)) : "");
     setNota(f?.nota ?? "");
+    setDia(suDia);
   };
 
   const cerrar = () => {
     setEdicion(null);
     setMinutos("");
     setNota("");
+    setDia("");
     setMotivo("");
   };
 
@@ -149,7 +164,14 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
       if (edicion.modo === "nuevo") {
         const m = aMinutos(minutos);
         if (!m || m <= 0) throw new Error("escribe el tiempo: 45, 1:30 o 1h 30");
-        await enviar("manual", { ref: referencia, persona: quien, minutos: m, nota: nota || null, tarea: issueId });
+        await enviar("manual", {
+          ref: referencia,
+          persona: quien,
+          minutos: m,
+          nota: nota || null,
+          tarea: issueId,
+          cuando: dia || undefined,
+        });
       } else if (edicion.modo === "editar") {
         const m = aMinutos(minutos);
         if (m == null) throw new Error("escribe el tiempo: 45, 1:30 o 1h 30");
@@ -159,6 +181,8 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
           persona: quien,
           minutos: m,
           nota: nota !== edicion.nota ? nota : undefined,
+          // Igual que la nota: el día solo viaja si cambia.
+          cuando: dia && dia !== edicion.dia ? dia : undefined,
           motivo,
         });
       } else {
@@ -188,6 +212,16 @@ export const FichajesDeLaTarea = observer(function FichajesDeLaTarea(props: Prop
             value={minutos}
             onChange={(e) => setMinutos(e.target.value)}
             autoFocus
+          />
+          {/* El día en que se trabajó. Sin esto, lo del viernes apuntado el lunes
+              caía en el lunes y descuadraba el cierre de mes. */}
+          <input
+            type="date"
+            className={cn(campo, "w-36")}
+            max={new Date().toISOString().slice(0, 10)}
+            value={dia}
+            onChange={(e) => setDia(e.target.value)}
+            title="El día en que se hizo el trabajo"
           />
           <input
             className={cn(campo, "min-w-[10rem] flex-1")}
