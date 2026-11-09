@@ -158,8 +158,14 @@ export class IssueFilterHelperStore implements IIssueFilterHelperStore {
     if (!currentUserId) return undefined;
     switch (type) {
       case "assigned":
+        // piensaenweb: «Mis tareas» es esta vista, y es para lo que queda por
+        // hacer. Antes traia tambien lo hecho y lo descartado; como Plane pagina,
+        // lo cerrado ocupaba sitio en la primera pagina y parte de lo abierto no
+        // salia hasta cargar mas (le paso a Andres: 23 cerradas de 65). Se filtra
+        // en el servidor: lo cerrado sigue en cada proyecto y en «Todas».
         return {
           assignees: currentUserId,
+          state_group: "backlog,unstarted,started",
         };
       case "created":
         return {
